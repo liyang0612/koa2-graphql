@@ -1,0 +1,21 @@
+{
+  "name": "graphql-koa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "liyang",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.10.0",
+    "apollo-server-koa": "^2.10.0",
+    "graphql": "^14.6.0",
+    "koa": "^2.11.0",
+    "koa-body": "^4.1.1",
+    "koa-jwt": "^3.6.0",
+    "md5": "^2.2.1",
+    "mysql": "^2.18.1"
+  }
+}

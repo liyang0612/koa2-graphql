@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server-koa')
 const jwt = require('koa-jwt')
-const bodyparser = require('koa-bodyparser');
+
 const Koa = require('koa')
 const koaBody = require('koa-body')
 
@@ -27,7 +27,6 @@ const resolvers = { Query: { getBooks: (parent, args, context, info) => {
  
 const server = new ApolloServer({ typeDefs, resolvers })
 const app = new Koa()
-
 // 验证token
 app.use(async function (ctx, next) {
   return next().catch(err => {
@@ -43,13 +42,14 @@ app.use(async function (ctx, next) {
 app.use(jwt({ secret: 'my-secret' }).unless({
   path:[/^\/login|^\/register/]
 }))
-app.use((bodyparser()))
 app.use(koaBody({
   multipart: true,  // 支持表单上传
   formidable: {
     maxFileSize: 10 * 1024 * 1024, // 修改文件大小限制，默认位2M
   }
 }))
+
+
 // 加入路由
 app.use(router.routes())
 

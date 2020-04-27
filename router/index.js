@@ -102,13 +102,31 @@ router.post('/api/upload', async function(ctx) {
   const file = ctx.request.files.file; // 获取上传文件
   // 创建可读流
   const reader = fs.createReadStream(file.path);
-  let filePath = path.join(__dirname, 'upload/') + `${file.name}`;
-  console.log(filePath)
+  let filePath = path.join(__dirname, '../upload/') + `${file.name}`;
   // 创建可写流
   const writeStream = fs.createWriteStream(filePath);
   // 可读流通过管道写入可写流
   reader.pipe(writeStream);
   return ctx.body = "上传成功！"
+})
+
+
+// 商品
+router.post('/api/goods/add', async function(ctx) {
+  const { name, imgUrl = null, goodsTxt = null, price } = ctx.request.body
+  let msg = '新增成功'
+  if (!name) {
+    msg = '商品名称不能为空'
+  } else if(!price) {
+    msg = '商品价格不能为空'
+  }
+  const result = await querySql(`INSERT INTO mysql_test.goods VALUES(null, '${name}',${imgUrl},${goodsTxt},${price})`)
+  if (result) {
+    ctx.body = {
+      status: 400,
+      msg
+    }
+  }
 })
 
 module.exports = router

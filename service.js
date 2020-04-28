@@ -2,7 +2,7 @@ const http = require('http')
 const app = require('./app')
 
 app.on('error', function(err) {
-  console.log('server error', err)
+  console.error('server error', err)
 })
 
 http.createServer(app.callback()).listen(4000, function() {

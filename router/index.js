@@ -123,8 +123,23 @@ router.post('/api/goods/add', async function(ctx) {
   const result = await querySql(`INSERT INTO mysql_test.goods VALUES(null, '${name}',${imgUrl},${goodsTxt},${price})`)
   if (result) {
     ctx.body = {
-      status: 400,
+      status: 200,
       msg
+    }
+  }
+})
+
+// 商品列表
+router.get('/api/goods/list', async function(ctx) {
+  const { page = 0, pageSize = 10, name = '' } = ctx.request.query
+  const startIndex = page === 0 ? 0 : (page - 1) * pageSize
+  const result = await querySql(`SELECT * FROM mysql_test.goods WHERE name LIKE '%${name}%' LIMIT ${startIndex},${pageSize}`)
+  const count = await querySql(`SELECT count(*) from mysql_test.goods`)
+  ctx.body = {
+    status: 200,
+    data: {
+      list: result,
+      total: count[0]['count(*)']
     }
   }
 })

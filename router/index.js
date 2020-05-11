@@ -113,14 +113,21 @@ router.post('/api/upload', async function(ctx) {
 
 // 商品
 router.post('/api/goods/add', async function(ctx) {
-  const { name, imgUrl = null, goodsTxt = null, price } = ctx.request.body
+  const { id = null, name, imgUrl = null, goodsTxt = null, price } = ctx.request.body
+  let result = null
   let msg = '新增成功'
-  if (!name) {
-    msg = '商品名称不能为空'
-  } else if(!price) {
-    msg = '商品价格不能为空'
+  if (id === null) {
+    if (!name) {
+      msg = '商品名称不能为空'
+    } else if(!price) {
+      msg = '商品价格不能为空'
+    }
+    result = await querySql(`INSERT INTO mysql_test.goods VALUES(null, '${name}','${imgUrl}','${goodsTxt}',${price})`)  
+  } else {
+    msg = '编辑成功'
+    result = await querySql(`UPDATE mysql_test.goods SET name='${name}',imgUrl='${imgUrl}',goodsTxt='${goodsTxt}',price=${price} WHERE id=${id}`)
   }
-  const result = await querySql(`INSERT INTO mysql_test.goods VALUES(null, '${name}',${imgUrl},${goodsTxt},${price})`)
+
   if (result) {
     ctx.body = {
       status: 200,
